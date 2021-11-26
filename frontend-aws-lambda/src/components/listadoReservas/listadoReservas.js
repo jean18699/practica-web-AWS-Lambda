@@ -46,11 +46,7 @@ export default {
       })
     },
     agregarReserva(){
-    /* var dformat = [this.fechaReserva.getMonth()+1,
-      this.fechaReserva.getDate(),
-      this.fechaReserva.getFullYear()].join('/')+' '+
-       [this.fechaReserva.getHours(),
-        this.fechaReserva.getMinutes()].join(':');*/
+  
       
       let selectedDate = new Date(this.fechaReserva);
  
@@ -82,6 +78,4 @@ export default {
   }
 }
 
-var mindate = new Date().toLocaleDateString("en-US");
-console.log(mindate)
 
