@@ -12,28 +12,28 @@
           <div class="row mb-3">
             <div class="col-12">
               <label class="form-label">ID</label>
-              <input class="form-control" type="number" name="nombre" required>
+              <input class="form-control" type="number" maxlength="8" name="id" v-model="formRegistro.id" required>
             </div>
          </div>
          
          <div class="row mb-3">
             <div class="col-12">
               <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" name="nombre" required>
+              <input type="text" class="form-control" name="nombre" v-model="formRegistro.nombre" required>
             </div>
          </div>
         
          <div class="row mb-3">
           <div class="col-12">
             <label class="form-label">Carrera</label>
-            <input type="text" class="form-control" name="carrera" required>
+            <input type="text" class="form-control" name="carrera" v-model="formRegistro.carrera" required>
           </div>
          </div>
        
         <div class="row mb-3">
           <div class="col-12">
             <label class="form-label">Laboratorio</label>
-            <select class="form-select" required>
+            <select class="form-select" v-model="formRegistro.laboratorio" required>
               <option value="computacion">Computacion</option>
               <option value="redes">Redes</option>
               <option value="comunicaciones">Comunicaciones</option>
@@ -44,24 +44,51 @@
         <div class="row mb-3">
           <div class="col-12">
             <label class="form-label">Fecha Reserva</label>
-            <input id="datetime" type="datetime-local"  class="form-control" required>
+            <input id="datetime" type="datetime-local"  class="form-control" v-model="fechaReserva" required>
           </div>
         </div>
 
         <div class="row align-content-center">
          
-            <b-button class="mt-3 btn-outline-primary" style="background-color: white;" type="submit" >Reservar</b-button>
-            <b-button class="mt-3 mr-1 btn-outline-danger" style="background-color: white;" block @click="$bvModal.hide('registro')" fullwidth>Cancelar</b-button>
+            <button class="btn mt-3 btn-outline-primary" v-on:click="agregarReserva()" style="background-color: white; color: blue" type="button" >Reservar</button>
+            <b-button class="mt-3 mr-1 btn-outline-danger" style="background-color: white; color: red;" block @click="$bvModal.hide('registro')" fullwidth>Cancelar</b-button>
         
         </div>
         
 
       </form>
     </div>
-    
-    
+  </b-modal>
 
-   
+
+  <b-modal id="registros-pasados" hide-footer>
+    <template #modal-title>
+      Buscar registros pasados
+    </template>
+    <div class="d-block text-left">
+      <form class="form-control-lg">
+          <div class="row mb-3">
+            <div class="col-6">
+              <label class="form-label">Fecha inicial</label>
+              <input class="form-control" type="date" name="startDate" required>
+            </div>
+         
+            <div class="col-6">
+              <label class="form-label">Fecha final</label>
+              <input type="date" class="form-control" name="endDate" required>
+            </div>
+         </div>
+        
+        <div class="row align-content-center">
+         
+            <b-button class="mt-3 btn-outline-primary" style="background-color: white; color: blue" type="submit" >Buscar</b-button>
+            <b-button class="mt-3 mr-1 btn-outline-danger" style="background-color: white; color: red;" block @click="$bvModal.hide('registro')" fullwidth>Cancelar</b-button>
+        
+        </div>
+        
+
+      </form>
+    </div>
   </b-modal>
 
     <div class="row">
@@ -69,9 +96,15 @@
     </div>
    
     <section class="card mt-3">
-        <div class="card-header d-flex">
-            <div class="ms-auto">
-                <b-button v-b-modal.registro class="btn btn-primary">Agregar Reserva</b-button>
+        <div class="card-header">
+            <div class="row">
+              <div class="col-6" style="text-align: left;">
+                <b-button v-b-modal.registro class="btn-outline-success mr-3" style="background-color: white; color: green; " type="submit">Agregar Reserva</b-button>
+              </div>
+              <div class="col-6" style="text-align: right;">
+                <b-button v-b-modal.registros-pasados class="btn-outline-secondary" style="background-color: white;" type="submit">Registros pasados</b-button>
+              </div>
+               
             </div>
         </div>
         <div class="card-body table-responsive-lg">
@@ -91,7 +124,7 @@
                         <td>{{reserva.id}}</td>
                         <td>{{reserva.nombre}}</td>
                         <td>{{reserva.laboratorio}}</td>
-                        <td>{{reserva.fecha}}</td>
+                        <td>{{reserva.datetime}}</td>
                     </tr>
                     </tbody>
                 </table>

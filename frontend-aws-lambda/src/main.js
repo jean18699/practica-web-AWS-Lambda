@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 Vue.use(BootstrapVue)
 
 const myRoutes = [
-  {path: "/listadoReservas", component: listadoReservas},
+  {path: "/", component: listadoReservas},
 ]
 
 const router = new VueRouter({
