@@ -3,22 +3,21 @@ import axios from 'axios';
 export default {
 
   name: 'listado-reservas',
-  components: {},
+  components: {
+ 
+  },
   props: [],
   data () {
     return {
 
-      reserva: {id:1, nombre:"Estudiante 1", laboratorio: "REDES", fecha: "01-01-2001"},
-
       reservas: [],
 
-     /* id: "0",
-      nombre: "string",
-      carrera: "string",
-      laboratorio: "string",
-      fecha: "string",*/
+      fechaActual: new Date(),
       fechaReserva: new Date(),
-     
+      fechaConsultaReservaInicial: new Date(),
+      fechaConsultaReservaFinal: new Date(),
+      permisoRegistro: true,
+
       formRegistro:{
        "id":"",
        "nombre":"",
@@ -27,54 +26,80 @@ export default {
        "fechaReserva":""
      },
      
-      showModal: false
-      
+     formConsulta:{
+      "fechaInicialReserva":"",
+      "fechaFinalReserva":""
+     },
+     
     }
   },
   computed: {
 
   },
   mounted () {
-      this.getReservas()
+      this.getReservas();   
+      this.formatearFechaActual();
+
   },
   methods: {
     getReservas(){
-     
       //mock server para testing
       axios.get("https://f905de0e-537a-43da-898b-b60be37fb530.mock.pstmn.io/reservas").then(response => {
         this.reservas = response.data.reservas
       })
     },
+
+    getReservasByRangoFecha(){
+      this.formConsulta.fechaInicialReserva = this.formatearFechaConsulta(this.fechaConsultaReservaInicial)
+      this.formConsulta.fechaFinalReserva = this.formatearFechaConsulta(this.fechaConsultaReservaFinal)
+      console.log(this.formConsulta)
+    },
+    
     agregarReserva(){
-  
-      
-      let selectedDate = new Date(this.fechaReserva);
- 
-      let day = selectedDate.getDate()
-      let month = selectedDate.getMonth() + 1
-      let year = selectedDate.getFullYear()
-      let hour = selectedDate.getHours()
-      let minutes = selectedDate.getMinutes()
-
-      if(month < 10){
-        
-        console.log(day+"-"+"0"+month+"-"+year+" "+hour+":"+minutes)
-        this.formRegistro.fechaReserva = day+"-"+"0"+month+"-"+year+" "+hour+":"+minutes;
-        
-        
-      }else{
-        
-        console.log(day+"-"+month+"-"+year+" "+hour+":"+minutes)
-        this.formRegistro.fechaReserva = day+"-"+month+"-"+year+" "+hour+":"+minutes;
-     
-      }
-
+   
+      this.formRegistro.fechaReserva = this.formatearFecha(this.fechaReserva)     
       console.log(this.formRegistro)
      
       /*axios.post("https://f905de0e-537a-43da-898b-b60be37fb530.mock.pstmn.io/reservas").then(response => {
         this.reservas = response.data.reservas
       })*/
+    },
+
+    formatearFecha(fecha)
+    {
+      let selectedDate = new Date(fecha);
+      let day = (selectedDate.getDate() + 1), month = selectedDate.getMonth() + 1, year = selectedDate.getFullYear();
+      let hour = selectedDate.getHours(), minutes = selectedDate.getMinutes()    
+      return day+"-"+(month<10?"0":'')+month+"-"+year+" "+hour+":"+ (minutes < 10? '0':'')+minutes;  
+    },
+
+    formatearFechaConsulta(fecha)
+    {
+      let selectedDate = new Date(fecha);
+      let day = (selectedDate.getDate() + 1), month = selectedDate.getMonth() + 1, year = selectedDate.getFullYear()
+      return (day)+"-"+(month<10?"0":'')+month+"-"+year;
+    },
+
+    formatearFechaActual()
+    {
+      let selectedDate = new Date(this.fechaActual);
+      let day = (selectedDate.getDate()), month = selectedDate.getMonth() + 1, year = selectedDate.getFullYear()
+      this.fechaActual = year+"-"+(month<10?"0":'')+month+"-"+day;
+    },
+   
+    checkHorasReserva(){
+      let selectedDate = new Date(this.fechaReserva);
+      let hour = selectedDate.getHours()
+      if(hour >= 8 && hour <= 22){
+        this.permisoRegistro = true
+      }else
+      {
+        this.permisoRegistro = false;
+      }
     }
+
+
+
   }
 }
 
